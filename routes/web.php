@@ -22,10 +22,10 @@ Route::get('/create', UsuarioController::class . '@create')->name('usuario.creat
 
 Route::post('/usuario', UsuarioController::class .'@store')->name('usuario.store');
 
-Route::get('/usuario/{post}',UsuarioController::class .'@show')->name('usuario.show');
+Route::get('/usuario/{usuario}',UsuarioController::class .'@show')->name('usuario.show');
 
-Route::get('/usuario/{post}/edit',UsuarioController::class .'@edit')->name('usuario.edit');
+Route::get('/usuario/{usuario}/edit',UsuarioController::class .'@edit')->name('usuario.edit');
 
-Route::put('/usuario/{post}', UsuarioController::class .'@update')->name('usuario.update');
+Route::put('/usuario/{usuario}', UsuarioController::class .'@update')->name('usuario.update');
 
-Route::delete('/usuario/{post}', UsuarioController::class .'@destroy')->name('usuario.destroy');
+Route::delete('/usuario/{usuario}', UsuarioController::class .'@destroy')->name('usuario.destroy');

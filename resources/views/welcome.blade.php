@@ -76,12 +76,12 @@
           <td>{{$item->apodo}}</td>
           <td>{{$item->contrasenha}}</td>
           <td>
-            <a href="" data-bs-toggle="modal" data-bs-target="#modalEditar" class="btn btn-warning btn-sn"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a href="" data-bs-toggle="modal" data-bs-target="#modalEditar{{$item->id}}" class="btn btn-warning btn-sn"><i class="fa-solid fa-pen-to-square"></i></a>
             <a href="" class="btn btn-danger btn-sn"><i class="fa-solid fa-trash"></i></a>
           </td>
 
           <!-- Modal modificar -->
-          <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="modalEditar{{$item->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -89,22 +89,22 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form>
+                  <form action="{{route('usuario.update')}}" method="post">
                     <div class="mb-3">
                       <label for="id" class="form-label">Id</label>
-                      <input type="text" class="form-control" id="txtid" name="id" value="{{ $item->id }}" >
+                      <input type="text" class="form-control" id="txtid" name="id" value="{{ $item->id }}" required>
 
                     </div>
 
                     <div class="mb-3">
                       <label for="apodo" class="form-label">Apodo</label>
-                      <input type="texto" class="form-control" id="txtapodo" name="apodo">
+                      <input type="texto" class="form-control" id="txtapodo" name="apodo"  value="{{ $item->apodo }}" required>
 
                     </div>
                     <div class="mb-3">
                       <label for="contrasenha" class="form-label">Contrasenha</label>
-                      <input type="texto" class="form-control" id="txtcontrasenha" name="contrasenha">
-
+                      <input type="texto" class="form-control" id="txtcontrasenha" name="contrasenha"  value="{{ $item->contrasenha}}" required>
+                        
                     </div>
 
                     <div class="modal-footer">

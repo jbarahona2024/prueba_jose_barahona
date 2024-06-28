@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
-    public function index (){
-        $datos = DB:: select ("select * FROM laravel.usuario");
+    public function index() {
+        $datos = DB::select("select * FROM usuario");
+        return view("welcome")->with("datos", $datos); 
+    }
 
-        return view ("welcome")->with("datos", $datos); 
-    }  
-   
     public function create()
     {
         return view('usuario.create');
@@ -25,34 +23,59 @@ class UsuarioController extends Controller
             'apodo' => 'required|max:255',
             'contrasenha' => 'required'
         ]);
-        
-        Usuario::create($request -> all());
-        return redirect()->route('usuario.index');
+
+        try {
+            DB::insert('insert into usuario (apodo, contrasenha) values (?, ?)', [
+                $request->apodo, $request->contrasenha
+            ]);
+            return redirect()->route('usuario.index')->with('success', 'Usuario creado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('usuario.create')->with('error', 'Hubo un problema al crear el usuario.');
+        }
     }
 
-    public function show(Usuario $usuario)
+    public function show($id)
     {
-        return view('usuario.show', compact('usuario'));
+        $usuario = DB::select('select * from usuario where id = ?', [$id]);
+        if (!$usuario) {
+            return redirect()->route('usuario.index')->with('error', 'Usuario no encontrado.');
+        }
+        return view('usuario.show', ['usuario' => $usuario[0]]);
     }
 
-    public function edit(Usuario $usuario)
+    public function edit($id)
     {
-        return view('usuario.edit', compact('usuario'));
+        $usuario = DB::select('select * from usuario where id = ?', [$id]);
+        if (!$usuario) {
+            return redirect()->route('usuario.index')->with('error', 'Usuario no encontrado.');
+        }
+        return view('usuario.edit', ['usuario' => $usuario[0]]);
     }
 
-    public function update(Request $request, Usuario $usuario)
+    public function update(Request $request)
     {
-        $validatedData = $request->validate([
+        /*$validatedData = $request->validate([
             'apodo' => 'required|max:255',
             'contrasenha' => 'required'
-        ]);
-        $usuario->update($validatedData);
-        return redirect('/usuario')->with('success', 'Usuario actualizado exitosamente.');
+        ]);*/
+
+        try {
+            DB::update('update usuario set apodo = ?, contrasenha = ? where id = ?', [
+                $request->apodo, $request->contrasenha, $request->id
+            ]);
+            return redirect()->route('usuario.index')->with('success', 'Usuario actualizado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('usuario.index')->with('error', 'Hubo un problema al actualizar el usuario.');
+        }
     }
 
-    public function destroy(Usuario $usuario)
+    public function destroy($id)
     {
-        $usuario->delete();
-        return redirect('/usuario')->with('success', 'Usuario eliminado exitosamente.');
+        try {
+            DB::delete('delete from usuario where id = ?', [$id]);
+            return redirect()->route('usuario.index')->with('success', 'Usuario eliminado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('usuario.index')->with('error', 'Hubo un problema al eliminar el usuario.');
+        }
     }
 }

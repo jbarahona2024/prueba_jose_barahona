@@ -4,82 +4,55 @@ namespace App\Http\Controllers;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+    public function index (){
+        $datos = DB:: select ("select * FROM laravel.usuario");
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+        return view ("welcome")->with("datos", $datos); 
+    }  
+   
     public function create()
     {
-        //
+        return view('usuario.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'apodo' => 'required|max:255',
+            'contrasenha' => 'required'
+        ]);
+        
+        Usuario::create($request -> all());
+        return redirect()->route('usuario.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Usuario  $usuario
-     * @return \Illuminate\Http\Response
-     */
     public function show(Usuario $usuario)
     {
-        //
+        return view('usuario.show', compact('usuario'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Usuario  $usuario
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Usuario $usuario)
     {
-        //
+        return view('usuario.edit', compact('usuario'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Usuario  $usuario
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Usuario $usuario)
     {
-        //
+        $validatedData = $request->validate([
+            'apodo' => 'required|max:255',
+            'contrasenha' => 'required'
+        ]);
+        $usuario->update($validatedData);
+        return redirect('/usuario')->with('success', 'Usuario actualizado exitosamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Usuario  $usuario
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Usuario $usuario)
     {
-        //
+        $usuario->delete();
+        return redirect('/usuario')->with('success', 'Usuario eliminado exitosamente.');
     }
 }

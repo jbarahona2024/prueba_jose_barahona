@@ -9,17 +9,12 @@ use App\Models\Usuario;
 class crudcontroller extends Controller
 {
 
-    //
     public function index (){
         $datos = DB:: select ("select * FROM laravel.usuario");
 
         return view ("welcome")->with("datos", $datos); 
     }  
-
-    /*public function create ( request $request  ) {
-        return  $request->txtapodo;  
-    }*/
-
+   
     public function create()
     {
         return view('usuario.create');

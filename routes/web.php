@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\crudcontroller;
+use App\Http\Controllers\Usuariocontroller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,25 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get("/", [crudcontroller::class, "index"])-> name("crud.index");   
+Route::get('/', [UsuarioController::class, 'index']);
 
- // ruta para registrar usuarios -->
+Route::get('/', UsuarioController::class . '@index')->name('usuario.index');
 
-//Route::post("/usuarios", [crudcontroller::class, "create"])-> name("crud.create"); 
+Route::get('/create', UsuarioController::class . '@create')->name('usuario.create');
 
+Route::post('/usuario', UsuarioController::class .'@store')->name('usuario.store');
 
-Route::get('/', [CrudController::class, 'index']);
+Route::get('/usuario/{post}',UsuarioController::class .'@show')->name('usuario.show');
 
-Route::get('/', CrudController::class . '@index')->name('usuario.index');
+Route::get('/usuario/{post}/edit',UsuarioController::class .'@edit')->name('usuario.edit');
 
-Route::get('/create', CrudController::class . '@create')->name('usuario.create');
+Route::put('/usuario/{post}', UsuarioController::class .'@update')->name('usuario.update');
 
-Route::post('/usuario', CrudController::class .'@store')->name('usuario.store');
-
-Route::get('/usuario/{post}', CrudController::class .'@show')->name('usuario.show');
-
-Route::get('/usuario/{post}/edit', CrudController::class .'@edit')->name('usuario.edit');
-
-Route::put('/usuario/{post}', CrudController::class .'@update')->name('usuario.update');
-
-Route::delete('/usuario/{post}', CrudController::class .'@destroy')->name('usuario.destroy');
+Route::delete('/usuario/{post}', UsuarioController::class .'@destroy')->name('usuario.destroy');
